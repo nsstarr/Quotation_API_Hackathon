@@ -36,20 +36,43 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  // const {age, species, breed, address} = req.body;
+  let postcode = req.body.postcode;
+  async function checkPostCode(postcode) {
+    console.log("hello there");
+
+    const response = await fetch(
+      `https://remote.address44.com/v2/exapi/?access-key=1WN5WP19UUKN5SDRGJ_196_133_5VTO31CUO_AJMYDIQLMEGY66&postcode=${postcode}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return response.json();
+  }
+  let data = await checkPostCode(postcode);
+  console.log(data);
+
+  if (data) {
+    console.log("Address is valid");
+  } else {
+    console.log("Address is invalid");
+  }
+
   const petNumber = req.body.length;
   const payload = {};
-  const prices = [];
+  const prices = {};
+
   let totalPrice = 0;
   req.body.map((pet) => {
     let price = 120;
-    const { age, breed, region } = pet;
+    const { age, breed, region, name } = pet;
 
     price = ageMultiplier(price, age);
     price = breedDiscount(price, breed);
     price = regionMultiplier(price, region);
 
-    prices.push(Math.round(price * 100) / 100);
+    // prices.push(Math.round(price * 100) / 100);
+    prices[name] = Math.round(price * 100) / 100;
   });
 
   // let x;
@@ -61,7 +84,8 @@ router.post("/", async (req, res) => {
   // }
   // console.log(x);
 
-  prices.forEach((price) => {
+
+  Object.values(prices).forEach((price) => {
     totalPrice += price;
   });
 
