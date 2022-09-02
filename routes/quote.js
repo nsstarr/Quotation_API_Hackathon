@@ -61,13 +61,12 @@ router.post("/", async (req, res) => {
   // }
   // console.log(x);
 
-    prices.forEach((price) => {
+  prices.forEach((price) => {
     totalPrice += price;
   });
 
   if (prices.length > 1) {
-    totalPrice = totalPrice * 0.9
-    
+    totalPrice = totalPrice * 0.9;
   }
 
   console.log(totalPrice);
