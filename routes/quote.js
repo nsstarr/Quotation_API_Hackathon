@@ -1,5 +1,5 @@
 import express from "express";
-
+import fetch from "node-fetch";
 const router = express.Router();
 
 function ageMultiplier(price, age) {
@@ -36,7 +36,9 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  let postcode = req.body.postcode;
+  let postcode = String(req.body[0].postcode);
+  console.log("req.body.postcode :>> ", req.body[0].postcode);
+  //let postcode = "NG13Al";
   async function checkPostCode(postcode) {
     console.log("hello there");
 
@@ -50,7 +52,7 @@ router.post("/", async (req, res) => {
     return response.json();
   }
   let data = await checkPostCode(postcode);
-  console.log(data);
+  //console.log(data);
 
   if (data) {
     console.log("Address is valid");
@@ -83,7 +85,6 @@ router.post("/", async (req, res) => {
   //   });
   // }
   // console.log(x);
-
 
   Object.values(prices).forEach((price) => {
     totalPrice += price;
