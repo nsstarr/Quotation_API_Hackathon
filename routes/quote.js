@@ -39,13 +39,39 @@ router.post("/", async (req, res) => {
   // const {age, species, breed, address} = req.body;
   const petNumber = req.body.length;
   const payload = {};
-  const { age, breed, region } = req.body[0];
-  let price = 120;
-  price = ageMultiplier(price, age);
-  price = breedDiscount(price, breed);
-  price = regionMultiplier(price, region);
+  const prices = [];
+  let totalPrice = 0;
+  req.body.map((pet) => {
+    let price = 120;
+    const { age, breed, region } = pet;
 
-  res.json({ price: Math.round(price * 100) / 100 });
+    price = ageMultiplier(price, age);
+    price = breedDiscount(price, breed);
+    price = regionMultiplier(price, region);
+
+    prices.push(Math.round(price * 100) / 100);
+  });
+
+  // let x;
+  // if (prices.length > 1) {
+  //   x = prices.map((price) => {
+  //     console.log(price);
+  //     price * 0.9;
+  //   });
+  // }
+  // console.log(x);
+
+    prices.forEach((price) => {
+    totalPrice += price;
+  });
+
+  if (prices.length > 1) {
+    totalPrice = totalPrice * 0.9
+    
+  }
+
+  console.log(totalPrice);
+  res.json({ price: prices, totalPrice: Math.round(totalPrice * 100) / 100 });
 });
 
 export default router;
