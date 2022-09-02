@@ -36,7 +36,23 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  // const {age, species, breed, address} = req.body;
+  let postcode = "NG13Al";
+  async function checkPostCode(postcode) {
+    console.log("hello there");
+
+    const response = await fetch(
+      `https://remote.address44.com/v2/exapi/?access-key=1WN5WP19UUKN5SDRGJ_196_133_5VTO31CUO_AJMYDIQLMEGY66&postcode=${postcode}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return response.json()    
+    
+  }
+  let data = await checkPostCode(postcode);
+  console.log(data)
+
   const petNumber = req.body.length;
   const payload = {};
   const prices = [];
@@ -61,13 +77,12 @@ router.post("/", async (req, res) => {
   // }
   // console.log(x);
 
-    prices.forEach((price) => {
+  prices.forEach((price) => {
     totalPrice += price;
   });
 
   if (prices.length > 1) {
-    totalPrice = totalPrice * 0.9
-    
+    totalPrice = totalPrice * 0.9;
   }
 
   console.log(totalPrice);
