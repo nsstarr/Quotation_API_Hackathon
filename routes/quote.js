@@ -84,9 +84,6 @@ router.post("/", async (req, res) => {
   // }
   // console.log(x);
 
-  // prices.forEach((price) => {
-  //   totalPrice += price;
-  // });
 
   Object.values(prices).forEach((price) => {
     totalPrice += price;
